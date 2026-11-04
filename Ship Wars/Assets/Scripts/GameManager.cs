@@ -256,15 +256,24 @@ public class GameManager : NetworkBehaviour
     {
         if (!IsServerInitialized || _gameState.Value != State.Gameplay) return;
 
+        bool winnerFound = false;
         foreach (var p in _activePlayers)
         {
-            if ((ulong)p.OwnerId != deadPlayerClientId)
+            if (p != null && (ulong)p.OwnerId != deadPlayerClientId)
             {
                 ulong winnerClientId = (ulong)p.OwnerId;
                 _gameState.Value = State.GameOver;
                 NotifyGameOverObserversRpc(winnerClientId);
+                winnerFound = true;
                 break;
             }
+        }
+
+        // Jika testing solo/testingMode (hanya 1 player atau tidak ada lawan lain)
+        if (!winnerFound)
+        {
+            _gameState.Value = State.GameOver;
+            NotifyGameOverObserversRpc(ulong.MaxValue);
         }
     }
 

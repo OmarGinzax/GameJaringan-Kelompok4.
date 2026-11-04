@@ -1,0 +1,6 @@
+{
+  "watch": ["server.js", "database.js"],
+  "ext": "js,json",
+  "ignore": ["*.db", "*.db-*", "game_data.db*", "node_modules"]
+}
+
